@@ -15,6 +15,7 @@ release:
 
       export CACHE_FROM="--cache-from ${BUILD_IMAGE}"
       ./docker.sh release
+      docker tag evebox/builder:macos ${MACOS_BUILD_IMAGE}
       tar zcvf resources-public.tar.gz ./resources/public
       ./docker.sh release-windows
       docker push ${BUILD_IMAGE}
@@ -37,3 +38,20 @@ release:
       - "*.deb"
       - "CHECKSUMS.txt"
       - "resources-public.tar.gz"
+
+macos-build:
+  image: docker:stable
+  variables:
+    BUILD_IMAGE: registry.gitlab.com/$CI_PROJECT_PATH:testing-macos
+    DOCKER_HOST: tcp://docker:2375
+    DOCKER_DRIVER: overlay2
+  services:
+    - docker:dind
+  script:
+    - |
+      docker login -u gitlab-ci-token -p $CI_JOB_TOKEN registry.gitlab.com
+      docker pull ${BUILD_IMAGE} || true
+      export CACHE_FROM="--cache-from ${BUILD_IMAGE}"
+      ./docker.sh release-macos
+      docker tag evebox/builder:macos ${BUILD_IMAGE}
+      docker push ${BUILD_IMAGE}

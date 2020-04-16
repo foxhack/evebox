@@ -5,7 +5,7 @@ set -e
 IMAGE="evebox/builder:latest"
 
 docker_build() {
-    docker build ${CACHE_FROM} --rm \
+    docker build ${CACHE_FROM} \
 	   -t ${IMAGE} \
 	   -f ${DOCKERFILE} .
 }
