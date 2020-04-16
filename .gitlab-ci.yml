@@ -15,7 +15,7 @@ release:
 
       export CACHE_FROM="--cache-from ${BUILD_IMAGE}"
       ./docker.sh release
-      docker tag evebox/builder:macos ${MACOS_BUILD_IMAGE}
+      docker tag evebox/builder:latest ${BUILD_IMAGE}
       tar zcvf resources-public.tar.gz ./resources/public
       ./docker.sh release-windows
       docker push ${BUILD_IMAGE}
