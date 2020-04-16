@@ -23,6 +23,7 @@ release:
       docker pull ${MACOS_BUILD_IMAGE} || true
       export CACHE_FROM="--cache-from ${MACOS_BUILD_IMAGE}"
       ./docker.sh release-macos
+      docker tag evebox/builder:macos ${MACOS_BUILD_IMAGE}
       docker push ${MACOS_BUILD_IMAGE}
       
       mv dist/* .
